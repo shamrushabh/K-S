@@ -1,0 +1,32 @@
+name: Deploy React App to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # This workflow will run every time you push to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use a Node.js version compatible with your project
+
+      - name: Install dependencies 📦
+        run: pnpm install --no-frozen-lockfile # Use pnpm as indicated by your project's pnpm-lock.yaml
+
+      - name: Build React app 🏗️
+        run: pnpm run build
+
+      - name: Deploy to GitHub Pages 🚀
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist # This should match your build output directory (e.g., 'dist' for Vite)
+          cname: kandsservicesinternational.com # Your custom domain
