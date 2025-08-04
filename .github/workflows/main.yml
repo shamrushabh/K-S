@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: '20' # Use a Node.js version compatible with your project
 
+      - name: Install pnpm
+        run: npm install -g pnpm
+
       - name: Install dependencies 📦
         run: pnpm install --no-frozen-lockfile # Use pnpm as indicated by your project's pnpm-lock.yaml
 
