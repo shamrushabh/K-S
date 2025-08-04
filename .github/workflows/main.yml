@@ -8,6 +8,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # <--- ADD THIS LINE
 
     steps:
       - name: Checkout 🛎️
