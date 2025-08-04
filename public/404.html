@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <script>
+    // Function to get the base URL, handling both root and subdirectory deployments
+    function getBaseUrl() {
+      const pathSegments = window.location.pathname.split("/");
+      // If the path is just "/", it's a root deployment
+      if (pathSegments.length <= 2 && pathSegments[1] === "") {
+        return "/";
+      }
+      // Otherwise, assume the first segment is the base (e.g., /repo-name/)
+      // This part is mostly for gh-pages without custom domain, but harmless for custom domains
+      return "/" + pathSegments[1] + "/";
+    }
+
+    // Get the current path without the domain
+    const path = window.location.pathname;
+    const hash = window.location.hash;
+    const search = window.location.search;
+
+    // Construct the new URL to redirect to
+    // This ensures that if a direct link to a client-side route is used,
+    // it will be handled by the React router after redirection.
+    const newPath = getBaseUrl() + "#" + path.substring(getBaseUrl().length) + search + hash;
+
+    // Redirect to the new URL
+    window.location.replace(newPath);
+  </script>
+</head>
+<body>
+  <p>Redirecting to the main page...</p>
+</body>
+</html>
