@@ -1,37 +1,43 @@
-name: Deploy React App to GitHub Pages
+name: Deploy React App to GitHub Pages # This is just a name for your workflow
 
 on:
   push:
     branches:
-      - main # This workflow will run every time you push to the main branch
+      - main # This tells GitHub: "Run this recipe whenever new code is pushed to the 'main' branch."
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+  build-and-deploy: # This is the main task that will be performed
+    runs-on: ubuntu-latest # This specifies the type of computer (server) GitHub will use to run your recipe
     permissions:
-      contents: write # <--- ADD THIS LINE
+      contents: write # <--- THIS IS VERY IMPORTANT!
+      # This line gives GitHub permission to write files back to your repository.
+      # Specifically, it allows the workflow to create and update the 'gh-pages' branch
+      # where your website files are actually hosted. Without this, GitHub can't publish your site.
 
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4 # This step downloads your website code from your GitHub repository onto the server.
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Use a Node.js version compatible with your project
+          node-version: '20' # This step installs Node.js (a software needed to run JavaScript) on the server.
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: Install pnpm # <--- THIS IS ALSO VERY IMPORTANT!
+        run: npm install -g pnpm # This step installs 'pnpm' (your project's package manager) on the server.
+        # Your project uses 'pnpm' to manage its dependencies, so it needs to be installed first.
 
       - name: Install dependencies 📦
-        run: pnpm install --no-frozen-lockfile # Use pnpm as indicated by your project's pnpm-lock.yaml
+        run: pnpm install --no-frozen-lockfile # This step uses 'pnpm' to download all the necessary libraries and tools your website needs to run.
 
       - name: Build React app 🏗️
-        run: pnpm run build
+        run: pnpm run build # This step runs the 'build' command defined in your package.json.
+        # This command takes your React code and turns it into simple HTML, CSS, and JavaScript files
+        # that web browsers can understand. These files are usually put into a 'dist' folder.
 
       - name: Deploy to GitHub Pages 🚀
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@v4 # This is a special tool (action) that helps publish your website to GitHub Pages.
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist # This should match your build output directory (e.g., 'dist' for Vite)
-          cname: kandsservicesinternational.com # Your custom domain
+          github_token: ${{ secrets.GITHUB_TOKEN }} # This is a secret code that GitHub uses to allow the action to publish.
+          publish_dir: ./dist # This tells the publishing tool: "Take all the files from the 'dist' folder and put them on GitHub Pages."
+          cname: kandsservicesinternational.com # This tells the publishing tool: "Use this custom domain for my website."
